@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blue-green
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -34,13 +39,6 @@ spec:
     - protocol: TCP
       port: 30080
       targetPort: 8080
-  type: LoadBalancer
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":30080}]'
-    alb.ingress.kubernetes.io/certificate-arn: $CERT_ARN
 ---
 kind: Service
 apiVersion: v1
@@ -53,10 +51,32 @@ spec:
     - protocol: TCP
       port: 30081
       targetPort: 8080
-  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: 
+  name: prod-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":30081}]'
-    alb.ingress.kubernetes.io/certificate-arn: $CERT_ARN
+spec:
+  rules:
+  - host: joonhan.link
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rollout-bluegreen-active
+            port:
+              number: 30080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rollout-bluegreen-preview
+            port:
+              number: 30081
+
