@@ -1,18 +1,3 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: myweb
-spec:
-  destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: myweb
-  source:
-    repoURL: 'https://github.com/Han-Joon-Hyeok/aews-cicd'
-    path: '3/deploy'
-    targetRevision: 'HEAD'
-  syncPolicy:
-    automated: {}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
