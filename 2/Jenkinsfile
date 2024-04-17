@@ -1,6 +1,7 @@
 pipeline { 
     environment {
         container_name = "myweb" // container 이름
+        version = "v1.0.0"
         repository = "joonhyeokhan/myweb"  //docker hub id와 repository 이름
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // jenkins에 등록해 놓은 docker hub credentials 이름
         dockerImage = ''
@@ -15,7 +16,7 @@ pipeline {
       stage('Deploy container') { 
           steps { 
               script {
-                sh 'docker run -d -p 80:80 --rm --name $container_name $repository:$BUILD_NUMBER'
+                sh 'docker run -d -p 80:80 --rm --name $container_name $repository:$version' // docker container 실행
               } 
           }
       }
