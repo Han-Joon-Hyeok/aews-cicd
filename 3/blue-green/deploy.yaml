@@ -32,11 +32,15 @@ spec:
     app: rollout-bluegreen
   ports:
     - protocol: TCP
-      port: 80
+      port: 30080
       targetPort: 8080
-      nodePort: 30081
-  type: NodePort
-
+  type: LoadBalancer
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":30080}]'
+    alb.ingress.kubernetes.io/certificate-arn: $CERT_ARN
 ---
 kind: Service
 apiVersion: v1
@@ -47,7 +51,12 @@ spec:
     app: rollout-bluegreen
   ports:
     - protocol: TCP
-      port: 80
+      port: 30081
       targetPort: 8080
-      nodePort: 30082
-  type: NodePort
+  type: LoadBalancer
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":30081}]'
+    alb.ingress.kubernetes.io/certificate-arn: $CERT_ARN
