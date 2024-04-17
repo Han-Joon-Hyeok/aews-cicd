@@ -60,6 +60,7 @@ metadata:
   namespace: blue-green
   name: prod-ingress
   annotations:
+    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/backend-protocol: HTTP
