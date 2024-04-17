@@ -37,7 +37,7 @@ spec:
     app: rollout-bluegreen
   ports:
     - protocol: TCP
-      port: 30080
+      port: 8080
       targetPort: 8080
 ---
 kind: Service
@@ -49,13 +49,13 @@ spec:
     app: rollout-bluegreen
   ports:
     - protocol: TCP
-      port: 30081
+      port: 8080
       targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: 
+  namespace: blue-green
   name: prod-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -65,18 +65,18 @@ spec:
   - host: joonhan.link
     http:
       paths:
-      - path: /
+      - path: /actvie
         pathType: Prefix
         backend:
           service:
             name: rollout-bluegreen-active
             port:
-              number: 30080
-      - path: /
+              number: 8080
+      - path: /preview
         pathType: Prefix
         backend:
           service:
             name: rollout-bluegreen-preview
             port:
-              number: 30081
+              number: 8080
 
