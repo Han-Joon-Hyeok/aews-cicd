@@ -1,0 +1,34 @@
+pipeline { 
+    environment {
+        container_name = "myweb" // container 이름
+        repository = "joonhyeokhan/myweb"  //docker hub id와 repository 이름
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // jenkins에 등록해 놓은 docker hub credentials 이름
+        dockerImage = ''
+  }
+  agent any 
+  stages { 
+      stage('Docker Hub Login'){
+          steps{
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin' // docker hub 로그인
+          }
+      }
+      stage('Deploy container') { 
+          steps { 
+              script {
+                sh 'docker run -d -p 80:80 --rm --name $container_name $repository:$BUILD_NUMBER'
+              } 
+          }
+      }
+  }
+  post {
+      success {
+        echo "This will run when the run finished successfully"
+      }
+      failure {
+        echo "This will run if failed"
+      }
+      changed {
+        echo "This will run when the state of the pipeline has changed"
+      }
+    }
+}
