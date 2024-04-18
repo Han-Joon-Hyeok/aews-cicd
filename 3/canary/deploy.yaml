@@ -19,14 +19,14 @@ spec:
           servicePort: 80
           rootService: rollouts-demo-root
       steps:
-      - setWeight: 20
-      - pause: {}
-      - setWeight: 40
-      - pause: {duration: 5s}
-      - setWeight: 60
-      - pause: {duration: 5s}
-      - setWeight: 80
-      - pause: {duration: 5s}
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 40
+        - pause: { duration: 5s }
+        - setWeight: 60
+        - pause: { duration: 5s }
+        - setWeight: 80
+        - pause: { duration: 5s }
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -37,16 +37,16 @@ spec:
         app: rollouts-demo
     spec:
       containers:
-      - name: rollouts-demo
-        image: argoproj/rollouts-demo:blue
-        ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        resources:
-          requests:
-            memory: 32Mi
-            cpu: 5m
+        - name: rollouts-demo
+          image: argoproj/rollouts-demo:blue
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 5m
 ---
 apiVersion: v1
 kind: Service
@@ -55,10 +55,10 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: rollouts-demo
 
@@ -70,10 +70,10 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: rollouts-demo
 ---
@@ -84,9 +84,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     app: rollouts-demo
