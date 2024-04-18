@@ -8,7 +8,7 @@ kind: Rollout
 metadata:
   name: rollout-bluegreen
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: rollout-bluegreen
